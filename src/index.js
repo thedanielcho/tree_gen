@@ -1,104 +1,128 @@
-import "./styles/index.scss";
-import "./images/yoda-stitch.jpg";
-import canvasExample from "./scripts/canvas";
-import Square from "./scripts/square";
-import { DOMExample } from "./scripts/DOMExample";
-const currentStateObj = {
-  currentExample: null,
-  currentEventListeners: [],
-};
+import * as THREE from 'three';
+import { Bone } from 'three';
+import createCylinder from './scripts/create_cylinder';
+import createBones from './scripts/create_bones';
+import createMesh from './scripts/create_mesh';
 
-document.querySelector("#canvas-demo").addEventListener("click", startCanvas);
-document.querySelector("#DOM-demo").addEventListener("click", startDOM);
+function main() {
+  const canvas = document.querySelector('#canvas');
+  const renderer = new THREE.WebGLRenderer({canvas});
 
-function startDOM() {
-  unregisterEventListeners();
-  clearDemo();
-  currentStateObj.currentExample = "DOMDEMO";
-  DOMExample();
-}
+  const fov = 75;
+  const aspect = 2;  // the canvas default
+  const near = 0.1;
+  const far = 1000;
+  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  camera.position.set(0, 30, 30);
+  // camera.up.set(0, 0, 0);
+  camera.lookAt(0, 10, 0);
 
-function startCanvas() {
-  clearDemo();
-  unregisterEventListeners();
-  currentStateObj.currentExample = "CANVASDEMO";
-  const canvas = new canvasExample();
-  canvas.createCanvas();
-  const squares = [new Square(canvas.ctx, canvas.coords, canvas.fillColor)];
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x8f97a6);
 
-  let animating = true;
-
-  const animation = () => {
-    canvas.clearCanvas();
-    if (animating) squares.forEach((sq) => sq.updateSquare(canvas.fillColor));
-    squares.forEach((sq) => sq.drawSquare());
-    window.requestAnimationFrame(animation);
-    squares.forEach((sq) => {
-      if (sq.coords[0] + sq.coords[2] > window.innerWidth)
-        sq.reverseAnimation();
-      if (sq.coords[0] < 0) sq.reverseAnimation();
-    });
+  {
+    const color = 0xFFFFFF;
+    const intensity = 1;
+    const light = new THREE.DirectionalLight(color, intensity);
+    light.position.set(-1, 2, 4);
+    scene.add(light);
+  }
+  
+  const segmentHeight = 5;
+  const segmentCount = 5;
+  const height = segmentHeight * segmentCount;
+  const halfHeight = height * 0.5;
+  
+  const sizing = {
+    width: 10,
+    segmentHeight: segmentHeight,
+    segmentCount: segmentCount,
+    height: height,
+    halfHeight: halfHeight,
   };
+  
+  const cylinder = createCylinder(sizing);
+  const bones = createBones(sizing);
+  let trunkMesh = createMesh(cylinder, bones);
+  debugger
 
-  window.requestAnimationFrame(animation);
+  // const geometry = new THREE.CylinderGeometry(5, 5, 50, 10, 15, false);
+  // const position = geometry.attributes.position;
+  // const vertex = new THREE.Vector3();
+  // debugger
+  // const skinIndices = [];
+  // const skinWeights = [];
+  
+  // for (let i = 0; i < position.count; i ++){
+  //   vertex.fromBufferAttribute(position, i);
 
-  window.addEventListener("keydown", handleKeyDown);
-  currentStateObj.currentEventListeners.push([
-    "window",
-    "keydown",
-    handleKeyDown,
-  ]);
+  //   const y = (vertex.y + sizing.halfHeight);
 
-  window.addEventListener("mousedown", handleMouseDown);
-  currentStateObj.currentEventListeners.push([
-    "window",
-    "mousedown",
-    handleMouseDown,
-  ]);
+  //   const skinIndex = Math.floor(y / sizing.segmentHeight);
+  //   const skinWeight = (y % sizing.segmentHeight) / sizing.segmentHeight;
 
-  function handleKeyDown(event) {
-    if (event.which === 32) {
-      event.preventDefault();
-      squares.forEach((sq) => sq.reverseAnimation());
-      canvas.setColor(`#${Math.floor(Math.random() * 16777215).toString(16)}`);
+  //   skinIndices.push( skinIndex, skinIndex + 1, 0, 0);
+  //   skinWeights.push(1 - skinWeight, skinWeight, 0, 0);
+  // }
+
+  // geometry.setAttribute( 'skinIndex', new THREE.Uint16BufferAttribute( skinIndices, 4 ) );
+  // geometry.setAttribute( 'skinWeight', new THREE.Float32BufferAttribute( skinWeights, 4 ) );
+
+  // let bones = [];
+
+  // let prevBone = new Bone();
+  // bones.push(prevBone);
+  // prevBone.position.y = sizing.halfHeight;
+
+  // for(let i = 0; i < sizing.segmentCount; i++){
+  //   let bone = new Bone();
+  //   bone.position.y = sizing.segmentHeight;
+  //   bones.push(bone);
+  //   prevBone.add(bone);
+  //   prevBone = bone;
+  // }
+
+  // const material = new THREE.MeshPhongMaterial({emissive: 0x156289});
+
+  // const mesh = new THREE.SkinnedMesh( geometry, material );
+  // const skeleton = new THREE.Skeleton( bones );
+
+  // const rootBone = skeleton.bones[ 0 ];
+  // mesh.add( rootBone );
+
+  // mesh.bind( skeleton );
+
+  // trunkMesh.position.set(0,25,0);
+
+  scene.add(trunkMesh);
+
+
+  function resizeRendererToDisplaySize(renderer) {
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
     }
+    return needResize;
   }
 
-  function handleMouseDown(event) {
-    event.preventDefault();
-    squares.push(
-      new Square(
-        canvas.ctx,
-        canvas.coords.map((co) => co + 25),
-        canvas.fillColor
-      )
-    );
-    // animating = !animating;
-  }
-}
+  function render(time) {
+    time *= 0.001;
 
-function unregisterEventListeners() {
-  while (currentStateObj.currentEventListeners.length) {
-    let [
-      selector,
-      event,
-      handler,
-    ] = currentStateObj.currentEventListeners.pop();
-    if (selector === "window") {
-      window.removeEventListener(event, handler);
-      console.log(handler);
-    } else {
-      document.querySelector(selector).removeEventListener(event, handler);
+    if (resizeRendererToDisplaySize(renderer)) {
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
     }
+
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
   }
+
+  requestAnimationFrame(render);
 }
 
-function clearDemo() {
-  if (currentStateObj.currentExample === "CANVASDEMO")
-    document.body.removeChild(document.querySelector("canvas"));
-  if (currentStateObj.currentExample === "DOMDEMO") {
-    [...document.querySelectorAll(".card")].forEach((elem) =>
-      document.body.removeChild(elem)
-    );
-  }
-}
+main();
