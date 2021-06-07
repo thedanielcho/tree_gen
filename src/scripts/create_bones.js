@@ -10,11 +10,11 @@ const createBones = (sizing) => {
   let bones = [];
   let prevBone = new Bone();
   bones.push(prevBone);
-  prevBone.position.y = halfHeight;
-
+  prevBone.position.y = -halfHeight;
+  
   for(let i = 0; i < segmentCount; i++){
     let bone = new Bone();
-    bone.position.y = sizing.segmentHeight;
+    bone.position.y = segmentHeight;
     bones.push(bone);
     prevBone.add(bone);
     prevBone = bone;
