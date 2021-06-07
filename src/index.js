@@ -61,6 +61,10 @@ function main() {
   const bones = createBones(sizing);
   let trunkMesh = createMesh(cylinder, bones, trunkFolder, requestRenderIfNotRequested);
 
+  //***set up branches
+
+
+  
   // let skeletonHelper = new SkeletonHelper(trunkMesh);
   // skeletonHelper.material.linewidth = 2;
   // scene.add(skeletonHelper)
