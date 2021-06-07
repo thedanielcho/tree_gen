@@ -39,7 +39,7 @@ const setupTrunkFolders = (mesh, folder, requestRender) => {
     for(let i = 0; i< bones.length; i++){
       // debugger
       const bone = bones[i];
-      if(i === 0){
+      if(i <= 1){
         bone.rotation.y = 0
       } else if(params.rotation) {
         bone.rotation.y = (Math.random() * (0 - 2)).toFixed(4)

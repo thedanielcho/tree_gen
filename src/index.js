@@ -7,6 +7,7 @@ import setupDatGui from './scripts/setupfolders';
 import oc from 'three-orbit-controls';
 import {GUI} from 'dat.gui';
 import setupTrunkFolders from './scripts/setup_trunk_folder';
+import Trunk from './scripts/trunk';
 
 function main() {
   const canvas = document.querySelector('#canvas');
@@ -42,7 +43,6 @@ function main() {
   
   //***setting up trunk
   const gui = new GUI();
-  const trunkFolder = gui.addFolder(`Trunk`);
 
   const segmentHeight = 14;
   const segmentCount = 7;
@@ -57,22 +57,44 @@ function main() {
     halfHeight: halfHeight,
   };
 
-  const cylinder = createCylinder(sizing);
-  const bones = createBones(sizing);
-  let trunkMesh = createMesh(cylinder, bones, trunkFolder, requestRenderIfNotRequested);
-
+  const trunk = new Trunk(sizing, gui,requestRenderIfNotRequested);
+  
   //***set up branches
 
+  function setupBranch(sizing, folder, requestRender, trunkMesh){
+    
+    let branchSizing = {
+      width: Math.floor(sizing.width / 2.5),
+      segmentHeight: Math.floor(sizing.segmentHeight/1.5), 
+      segmentCount: Math.floor(sizing.segmentCount/1.5),
+      height: Math.floor(sizing.segmentHeight/1.5) * Math.floor(sizing.segmentCount/1.5),
+      halfHeight: (Math.floor(sizing.segmentHeight/1.5) * Math.floor(sizing.segmentCount/1.5)) / 2,
+    }
+    debugger
+    let branchGeo = createCylinder(branchSizing);
+    let branchBones = createBones(branchSizing);
+    let branchMesh = createMesh(branchGeo, branchBones, folder, requestRender);
+    return branchMesh;
+  }
 
-  
-  // let skeletonHelper = new SkeletonHelper(trunkMesh);
-  // skeletonHelper.material.linewidth = 2;
-  // scene.add(skeletonHelper)
+  let branches = [];
 
-  setupTrunkFolders(trunkMesh, trunkFolder, requestRenderIfNotRequested);
 
-  trunkMesh.scale.multiplyScalar(1);
-  scene.add(trunkMesh);
+  const branchFolder = gui.addFolder(`Branches`);
+
+  // branches.push(setupBranch(sizing, branchFolder, requestRenderIfNotRequested))
+  // branches.forEach(branch => {
+  //   trunkMesh.add(branch);
+  // })
+  let branchMesh = setupBranch(sizing, branchFolder, requestRenderIfNotRequested);
+  trunk.mesh.skeleton.bones[3].add(branchMesh.skeleton.bones[0]);
+  branchMesh.skeleton.bones[0].position.x = trunk.mesh.skeleton.bones[3].position.x;
+  branchMesh.skeleton.bones[0].position.y = trunk.mesh.skeleton.bones[3].position.y;
+  branchMesh.skeleton.bones[0].position.z = trunk.mesh.skeleton.bones[3].position.z;
+  branchMesh.skeleton.bones[0].rotation.z = 5;
+  trunk.mesh.add(branchMesh)
+  trunk.mesh.scale.multiplyScalar(1);
+  scene.add(trunk.mesh);
 
   // let folder = gui.addFolder("test");
   // folder.addColor(new ColorGUIHelper(material, 'color'), 'value')
@@ -111,6 +133,7 @@ function main() {
   render();
 
   function requestRenderIfNotRequested() {
+    debugger
     if (!renderRequested) {
       renderRequested = true;
       requestAnimationFrame(render);

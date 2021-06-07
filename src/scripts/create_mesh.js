@@ -19,26 +19,7 @@ const createMesh = (geometry, bones, folder, requestRender) => {
   mesh.add(bones[0]);
   mesh.bind(skeleton);
 
-
-  class ColorGUIHelper {
-    constructor(object, prop) {
-      this.object = object;
-      this.prop = prop;
-    }
-    get value() {
-      return `#${this.object[this.prop].getHexString()}`;
-    }
-    set value(hexString) {
-      this.object[this.prop].set(hexString);
-    }
-  }
-
-    folder.addColor(new ColorGUIHelper(material, 'color'), 'value')
-        .name('color')
-        .onChange(requestRender);
-    folder.open();
-
-    return mesh;
+  return mesh;
 }
 
 export default createMesh;
