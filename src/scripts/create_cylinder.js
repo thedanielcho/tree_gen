@@ -10,7 +10,7 @@ const createCylinder = (sizing) => {
 
   // debugger
   const geometry = new CylinderGeometry(
-    Math.floor(width / 2),
+    Math.floor(width / 3),
     width,
     height,
     8,

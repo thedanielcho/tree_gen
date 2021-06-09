@@ -80,19 +80,29 @@ function main() {
   let branches = [];
 
 
-  const branchFolder = gui.addFolder(`Branches`);
+  
 
   // branches.push(setupBranch(sizing, branchFolder, requestRenderIfNotRequested))
   // branches.forEach(branch => {
   //   trunkMesh.add(branch);
   // })
-  let branchMesh = setupBranch(sizing, branchFolder, requestRenderIfNotRequested);
-  trunk.mesh.skeleton.bones[3].add(branchMesh.skeleton.bones[0]);
-  branchMesh.skeleton.bones[0].position.x = trunk.mesh.skeleton.bones[3].position.x;
-  branchMesh.skeleton.bones[0].position.y = trunk.mesh.skeleton.bones[3].position.y;
-  branchMesh.skeleton.bones[0].position.z = trunk.mesh.skeleton.bones[3].position.z;
-  branchMesh.skeleton.bones[0].rotation.z = 5;
-  trunk.mesh.add(branchMesh)
+  // let branchMesh = setupBranch(sizing, branchFolder, requestRenderIfNotRequested);
+  // trunk.mesh.skeleton.bones[3].add(branchMesh.skeleton.bones[0]);
+  // branchMesh.skeleton.bones[0].position.x = trunk.mesh.skeleton.bones[3].position.x;
+  // branchMesh.skeleton.bones[0].position.y = trunk.mesh.skeleton.bones[3].position.y + 5;
+  // branchMesh.skeleton.bones[0].position.z = trunk.mesh.skeleton.bones[3].position.z;
+  // branchMesh.skeleton.bones[0].rotation.z = 0.5;
+  // trunk.mesh.add(branchMesh)
+
+  // let branchMesh2 = setupBranch(sizing, branchFolder, requestRenderIfNotRequested);
+  // trunk.mesh.skeleton.bones[3].add(branchMesh2.skeleton.bones[0]);
+  // branchMesh2.skeleton.bones[0].position.x = trunk.mesh.skeleton.bones[3].position.x;
+  // branchMesh2.skeleton.bones[0].position.y = trunk.mesh.skeleton.bones[3].position.y + 5;
+  // branchMesh2.skeleton.bones[0].position.z = trunk.mesh.skeleton.bones[3].position.z;
+  // // branchMesh2.skeleton.bones[0].rotation.x = 1;
+  // branchMesh2.skeleton.bones[0].rotation.z = 2.5;
+  // trunk.mesh.add(branchMesh2)
+
   trunk.mesh.scale.multiplyScalar(1);
   scene.add(trunk.mesh);
 
