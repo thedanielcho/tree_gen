@@ -28,7 +28,7 @@ class Branch {
     return mesh
   }
 
-  setupBranchFolder(){
+  setupBranchFolder(folder){
     this.folder.add(this.params, "lean", -0.5, 0.5).onChange(this.setLean.bind(this));
     this.folder.add(this.params, "rotation", true, false).onChange(this.rotateY.bind(this));
     this.folder.add(this.params, "width", 0.8, 1).onChange(this.changeWidth.bind(this));

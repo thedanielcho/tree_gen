@@ -22,7 +22,7 @@ class Trunk {
       height: 1,
       basePos: 0,
       color: 0x58433d,
-      branchNum: 12
+      branchNum: 20.0
     };
     debugger
     this.branchSizing = {
@@ -35,7 +35,7 @@ class Trunk {
     this.branches = [];
     this.initialBranchPos = [];
     this.setupTrunkFolder();
-    this.createBranches();
+    this.setupBranches();
   }
 
   setupTrunkMesh(){
@@ -122,13 +122,35 @@ class Trunk {
     this.requestRender();
   }
 
-  createBranches(){
-    if(this.branches.length < this.params.branchNum){
-      for(let i = this.branches.length; i < this.params.branchNum; i++){
-        let branch = new Branch(this.branchSizing, this.branchFolder, this.requestRender, i);
+  setupBranches(){
+    this.setupBranchesFolder()
+    for(let i = this.branches.length; i < this.params.branchNum; i++){
+      let branch = new Branch(this.branchSizing, this.branchFolder, this.requestRender, (i + 1));
+      this.connectBranch(branch);
+    }
+  }
+
+  setupBranchesFolder(){
+    this.branchFolder.add(this.params, "branchNum", 0, 20).onChange(this.changeBranchNum.bind(this));
+  }
+
+  changeBranchNum(){
+    
+    if(this.branches.length <= Math.floor(this.params.branchNum)){
+      while(this.branches.length < Math.floor(this.params.branchNum)){
+        debugger
+        let branch = new Branch(this.branchSizing, this.branchFolder, this.requestRender, (this.branches.length + 1))
         this.connectBranch(branch);
       }
+    } else if(this.branches.length > Math.floor(this.params.branchNum)){
+      while(this.branches.length > Math.floor(this.params.branchNum)){
+        debugger
+        let branch = this.branches.pop();
+        this.initialBranchPos.pop();
+        this.mesh.remove(branch.mesh);
+      }
     }
+    this.requestRender();
   }
 
   connectBranch(branch){
@@ -139,16 +161,18 @@ class Trunk {
     let z;
     let different = false;
     while(!different){
-      y = Math.floor(Math.random() * ((this.bones.length - 3) - 2 + 1 ) + 2);
+      y = Math.floor(Math.random() * ((this.bones.length - 3) - 1 + 1 ) + 1);
       x = anglesZ[Math.floor(Math.random() * anglesZ.length)];
       z = anglesX[Math.floor(Math.random() * anglesX.length)];
       if (!this.initialBranchPos.some((sub) => {
-        debugger
+        // debugger
         return (sub[1] == y && sub[2] == z && sub[0] == x);
       })){
+        // debugger
         different = true;
         this.initialBranchPos.push([x,y,z]);
       } else{
+        // debugger
       }
     }
     branch.bones[0].position.x = this.bones[y].position.x;
