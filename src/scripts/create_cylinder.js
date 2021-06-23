@@ -4,13 +4,14 @@ import { CylinderGeometry, Float32BufferAttribute, Uint16BufferAttribute, Vector
 const createCylinder = (sizing) => {
   const segmentHeight = sizing.segmentHeight;
   const segmentCount = sizing.segmentCount;
-  const width = sizing.width
+  const width = sizing.width;
+  const topWidth = sizing.topWidth || width / 3
   const height = sizing.height;
   const halfHeight = sizing.halfHeight;
 
   // debugger
   const geometry = new CylinderGeometry(
-    Math.floor(width / 3),
+    topWidth,
     width,
     height,
     8,

@@ -16,7 +16,9 @@
   "author": "mrcjbradley",
   "license": "ISC",
   "dependencies": {
+    "core-js": "^3.15.1",
     "dat.gui": "^0.7.7",
+    "regenerator-runtime": "^0.13.7",
     "three": "^0.129.0",
     "three-orbit-controls": "^82.1.0"
   },

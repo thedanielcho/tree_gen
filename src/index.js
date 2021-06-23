@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Bone, SkeletonHelper } from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import createCylinder from './scripts/create_cylinder';
 import createBones from './scripts/create_bones';
 import createMesh from './scripts/create_mesh';
@@ -33,16 +34,58 @@ function main() {
   scene.background = new THREE.Color(0x8f97a6);
 
   //***light
+  let light;
   {
     const color = 0xFFFFFF;
     const intensity = 1;
-    const light = new THREE.DirectionalLight(color, intensity);
+    light = new THREE.DirectionalLight(color, intensity);
     light.position.set(-1, 2, -4);
     scene.add(light);
   }
   
+  let planeGeo = new THREE.PlaneGeometry( 10000, 10000 );
+  let material = new THREE.MeshToonMaterial({
+    color: 0x6a9367,
+    side: THREE.DoubleSide
+  })
+  let plane = new THREE.Mesh( planeGeo, material );
+  console.log(THREE.Math.radToDeg(1.5707963267948966) % 360)
+  console.log(THREE.Math.degToRad(90))
+  // debugger
+  plane.rotateX(THREE.Math.degToRad(90))
+  // debugger
+  scene.add(plane)
+
+  let params = {
+    bgColor: 0x8f97a6,
+    lightColor: 0xFFFFFF,
+    groundColor: 0x6a9367
+  }
+  
   //***setting up trunk
   const gui = new GUI();
+
+  const bgFolder = gui.addFolder('Background');
+  bgFolder.addColor(params, 'bgColor').onChange(changeBackgroundColor)
+  bgFolder.addColor(params, "lightColor").onChange(changeLightColor)
+  bgFolder.addColor(params, "groundColor").onChange(changeGroundColor);
+  
+  function changeBackgroundColor(){
+    scene.background = new THREE.Color(params.bgColor)
+    requestRenderIfNotRequested();
+  }
+
+  function changeLightColor(){
+    // debugger
+    light.color = new THREE.Color(params.lightColor);
+    // debugger
+    requestRenderIfNotRequested();
+  }
+
+  function changeGroundColor(){
+    plane.material.color = new THREE.Color(params.groundColor);
+    requestRenderIfNotRequested();
+  }
 
   const segmentHeight = 14;
   const segmentCount = 7;
@@ -51,6 +94,7 @@ function main() {
   
   const sizing = {
     width: 10,
+    topWidth: 1,
     segmentHeight: segmentHeight,
     segmentCount: segmentCount,
     height: height,
@@ -70,7 +114,7 @@ function main() {
       height: Math.floor(sizing.segmentHeight/1.5) * Math.floor(sizing.segmentCount/1.5),
       halfHeight: (Math.floor(sizing.segmentHeight/1.5) * Math.floor(sizing.segmentCount/1.5)) / 2,
     }
-    debugger
+    // debugger
     let branchGeo = createCylinder(branchSizing);
     let branchBones = createBones(branchSizing);
     let branchMesh = createMesh(branchGeo, branchBones, folder, requestRender);
@@ -103,11 +147,41 @@ function main() {
   // branchMesh2.skeleton.bones[0].rotation.z = 2.5;
   // trunk.mesh.add(branchMesh2)
 
+
+  //ADD THESE BACK IN
   trunk.mesh.scale.multiplyScalar(1);
   scene.add(trunk.mesh);
+  plane.position.y = trunk.bones[0].position.y;
 
   // let folder = gui.addFolder("test");
   // folder.addColor(new ColorGUIHelper(material, 'color'), 'value')
+
+  // const loader = new GLTFLoader();
+  // loader.load('src/models/leaf.glb', function (gltf) {
+  //   // debugger
+  //   let leaf = gltf.scene.children[2];
+  //   leaf.scale.set(10,10,10);
+  //   leaf.position.set(20,0,0);
+  //   leaf.rotation.z = 15;
+  //   scene.add(leaf)
+  //   leaf.material = new THREE.MeshToonMaterial()
+  //   leaf.material.color.set(0x34822d)
+  // }, undefined, function (error) {
+  //   console.error(error)
+  // });
+
+  // loader.load('src/models/leaf-long.glb', function (gltf) {
+  //   // debugger
+  //   let leaf = gltf.scene.children[2];
+  //   leaf.scale.set(10,10,10);
+  //   leaf.position.set(20,0,0);
+  //   leaf.rotation.z = 0;
+  //   scene.add(leaf)
+  //   leaf.material = new THREE.MeshToonMaterial()
+  //   leaf.material.color.set(0x34822d)
+  // }, undefined, function (error) {
+  //   console.error(error)
+  // });
 
 
 
@@ -143,7 +217,7 @@ function main() {
   render();
 
   function requestRenderIfNotRequested() {
-    debugger
+    // debugger
     if (!renderRequested) {
       renderRequested = true;
       requestAnimationFrame(render);
@@ -154,6 +228,22 @@ function main() {
   // window.addEventListener('resize', render);
   controls.addEventListener('change', requestRenderIfNotRequested);
   window.addEventListener('resize', requestRenderIfNotRequested);
+
+  function displayInstructions(){
+    const ul = document.querySelector('.instructions');
+    if(ul.classList.contains("display")){
+      ul.classList.remove("display")
+      button.classList.remove("display")
+    } else{
+      ul.classList.add("display")
+      button.classList.add("display")
+    }
+  }
+
+  const button = document.querySelector('.instructions-button');
+  button.addEventListener('click', displayInstructions);
+  const x = document.querySelector(".x");
+  x.addEventListener("click", displayInstructions)
   // requestAnimationFrame(render);
 
 }

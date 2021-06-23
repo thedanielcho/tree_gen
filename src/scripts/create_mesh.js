@@ -1,10 +1,9 @@
 import { EdgesGeometry, FlatShading, LineBasicMaterial, LineSegments, MeshToonMaterial, Scene, Skeleton, SkeletonHelper, SkinnedMesh } from "three"
 import {GUI} from 'dat.gui';
 
-const createMesh = (geometry, bones, folder, requestRender) => {
+const createMesh = (geometry, bones, folder, requestRender, color) => {
   const material = new MeshToonMaterial({
-    color: 0x58433d,
-    flatShading: true
+    color: color,
   })
 
   const mesh = new SkinnedMesh(geometry, material);
