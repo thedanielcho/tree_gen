@@ -1,7 +1,7 @@
 # Tree Gen
 ## Background and overview
- Tree Gen is a tool to dynamically generate 3D models of trees based on specifications the user inputs. 
- You can set the height, width, branch number, leaf number, color, and the speed at which the leaves fall off and regrow on the tree.
+ Tree Gen is a tool to dynamically generate a 3D model of a tree based on specifications the user inputs. 
+ You can set the height, width, branch number, leaf number, and color of the tree.
  And then once you create it, you can look around at it and watch the leaves floating in the air from any angle you want.
  
  ## Functionality and MVPs
