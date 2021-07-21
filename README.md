@@ -74,7 +74,6 @@ class Trunk {
 class Branch {
   constructor(sizing, branchFolder, requestRender, color, leafColor){
     this.sizing = sizing;
-    // this.branchFolder = branchFolder;
     this.folder = [];
     this.params = {
       lean: 0,
@@ -94,7 +93,6 @@ class Branch {
     this.requestRender = requestRender;
     this.leaves = [];
     this.setupLeaves()
-    // this.setupBranchFolder();
   }
 
 ```
@@ -145,7 +143,6 @@ connectBranch(branch){
     let rowFolder = this.branchesFolders[y-1];
     if(!rowFolder){
     }
-    // let i = 
     branch.setupBranchRotation(x,0,z);
     let folder = rowFolder.addFolder('Branch ' + y + "," + x + "," + z);
     branch.setupBranchFolder(folder)
@@ -173,8 +170,6 @@ async setupLeaves(){
       let max = bone.position.y;
       let min = this.bones[1].position.y;
       leafMesh.position.y = boneNum === this.bones.length - 1 ? 0 : Math.random() * (9 - 1) + 1;
-      // leafMesh.position.x = bone.position.x;
-      // leafMesh.position.z = bone.position.z;
       leafMesh.rotation.x = Math.random() * (6 - 1) + 1;
       leafMesh.rotation.y = Math.random() * (6 - 1) + 1;
       leafMesh.rotation.z = Math.random() * (6 - 1) + 1;
