@@ -9,7 +9,6 @@ const createCylinder = (sizing) => {
   const height = sizing.height;
   const halfHeight = sizing.halfHeight;
 
-  // debugger
   const geometry = new CylinderGeometry(
     topWidth,
     width,

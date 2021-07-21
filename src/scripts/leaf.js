@@ -16,7 +16,6 @@ class Leaf {
 
 
   async setupLeafMesh(long){
-    // debugger
     let path = 'src/models/leaf.glb'
     if(long){
       path = 'src/models/leaf-long.glb'

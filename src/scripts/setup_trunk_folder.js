@@ -8,7 +8,6 @@ const setupTrunkFolders = (mesh, folder, requestRender) => {
     height: 1,
     basePos: 0
   };
-  // debugger
   folder.add(params, "lean", -0.5, 0.5).onChange(setLean.bind(this));
   folder.add(params, "rotation", true, false).onChange(rotateY.bind(this));
   folder.add(params, "width", 0.8, 1).onChange(changeWidth.bind(this));
@@ -16,13 +15,11 @@ const setupTrunkFolders = (mesh, folder, requestRender) => {
 
   function setLean(){
     for(let i = 0; i< bones.length; i++){
-      // debugger
       const bone = bones[i];
       
       if(i === 0){
         bone.rotation.z = 0
       } else if(i > bones.length-4){
-        // debugger
         bone.rotation.z = -params.lean;
         bone.position.x = params.lean * 3;
       } else if(i === bones.length-4){
@@ -37,7 +34,6 @@ const setupTrunkFolders = (mesh, folder, requestRender) => {
 
   function rotateY(){
     for(let i = 0; i< bones.length; i++){
-      // debugger
       const bone = bones[i];
       if(i <= 1){
         bone.rotation.y = 0
@@ -52,7 +48,6 @@ const setupTrunkFolders = (mesh, folder, requestRender) => {
 
   function changeWidth(){
     for(let i = 0; i< bones.length; i++){
-      // debugger
       const bone = bones[i];
       if(i === 0){
       } else {
@@ -69,13 +64,10 @@ const setupTrunkFolders = (mesh, folder, requestRender) => {
     bone.scale.y = params.height;
     // requestRender();
     // for(let i = 0; i< bones.length; i++){
-    //   // debugger
     //   const bone = bones[i];
     //   if(i === 0){
-    //     debugger
     //     params.basePos = bone.position.y;
     //   } else {
-    //     debugger
     //     bone.scale.y = params.height;
     //     // bone.position.y = 14  + params.height;
     //   }

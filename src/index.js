@@ -51,9 +51,7 @@ function main() {
   let plane = new THREE.Mesh( planeGeo, material );
   console.log(THREE.Math.radToDeg(1.5707963267948966) % 360)
   console.log(THREE.Math.degToRad(90))
-  // debugger
   plane.rotateX(THREE.Math.degToRad(90))
-  // debugger
   scene.add(plane)
 
   let params = {
@@ -76,9 +74,7 @@ function main() {
   }
 
   function changeLightColor(){
-    // debugger
     light.color = new THREE.Color(params.lightColor);
-    // debugger
     requestRenderIfNotRequested();
   }
 
@@ -114,7 +110,6 @@ function main() {
       height: Math.floor(sizing.segmentHeight/1.5) * Math.floor(sizing.segmentCount/1.5),
       halfHeight: (Math.floor(sizing.segmentHeight/1.5) * Math.floor(sizing.segmentCount/1.5)) / 2,
     }
-    // debugger
     let branchGeo = createCylinder(branchSizing);
     let branchBones = createBones(branchSizing);
     let branchMesh = createMesh(branchGeo, branchBones, folder, requestRender);
@@ -158,7 +153,6 @@ function main() {
 
   // const loader = new GLTFLoader();
   // loader.load('src/models/leaf.glb', function (gltf) {
-  //   // debugger
   //   let leaf = gltf.scene.children[2];
   //   leaf.scale.set(10,10,10);
   //   leaf.position.set(20,0,0);
@@ -171,7 +165,6 @@ function main() {
   // });
 
   // loader.load('src/models/leaf-long.glb', function (gltf) {
-  //   // debugger
   //   let leaf = gltf.scene.children[2];
   //   leaf.scale.set(10,10,10);
   //   leaf.position.set(20,0,0);
@@ -217,7 +210,6 @@ function main() {
   render();
 
   function requestRenderIfNotRequested() {
-    // debugger
     if (!renderRequested) {
       renderRequested = true;
       requestAnimationFrame(render);

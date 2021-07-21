@@ -36,7 +36,6 @@ class Branch {
   setupBranchMesh(){
     const branchGeo = createCylinder(this.sizing);
     const bones = createBones(this.sizing);
-    // debugger
     const mesh = createMesh(branchGeo, bones, this.folder, this.requestRender, this.params.color);
     return mesh
   }
@@ -83,7 +82,6 @@ class Branch {
       if(i === 0){
         bone.rotation.z = bone.rotation.z
       } else if(i > this.bones.length-4){
-        // debugger
         bone.rotation.z = -this.params.lean;
         bone.position.x = this.params.lean * 3;
       } else if(i === this.bones.length-4){
@@ -97,7 +95,6 @@ class Branch {
   }
 
   rotateY(){
-    // debugger
     for(let i = 0; i< this.bones.length; i++){
       const bone = this.bones[i];
       if(i <= 1){
@@ -155,10 +152,8 @@ class Branch {
       leafMesh.scale.set(7,7,7);
       leafMesh.material = new THREE.MeshToonMaterial();
       leafMesh.material.color.set(this.params.leafColor)
-      // debugger
       let max = bone.position.y;
       let min = this.bones[1].position.y;
-      // debugger
       leafMesh.position.y = boneNum === this.bones.length - 1 ? 0 : Math.random() * (9 - 1) + 1;
       // leafMesh.position.x = bone.position.x;
       // leafMesh.position.z = bone.position.z;
@@ -176,7 +171,7 @@ class Branch {
     // leafMesh.scale.set(7,7,7);
     // leafMesh.material = new THREE.MeshToonMaterial();
     // leafMesh.material.color.set(0xd96443)
-    // debugger
+    // 
     // leafMesh.position.y = Math.random() * (9 - 1) + 1;
     // // leafMesh.position.x = bone.position.x;
     // // leafMesh.position.z = bone.position.z;

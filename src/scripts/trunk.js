@@ -29,7 +29,6 @@ class Trunk {
       branches : {},
       random: false
     };
-    // debugger
     this.branchSizing = {
       width: Math.floor(sizing.width / 4),
       segmentHeight: Math.floor(sizing.segmentHeight/1.5), 
@@ -90,10 +89,6 @@ class Trunk {
       branch.rotationZ();
     })
     this.params.random = false;
-    // debugger
-    // for(let i = 0; i < this.folder.__controllers.length; i++){
-    //   this.folder.__controllers[i].updateDisplay();
-    // }
     this.folder.updateDisplay();
     this.branchFolder.updateDisplay();
     this.requestRender();
@@ -122,7 +117,7 @@ class Trunk {
   setLean(){
     for(let i = 0; i< this.bones.length; i++){
       const bone = this.bones[i];
-      if(i === 0){``
+      if(i === 0){
         bone.rotation.z = 0
       } else if(i > this.bones.length-4){
         bone.rotation.z = -this.params.lean;
@@ -138,7 +133,6 @@ class Trunk {
   }
 
   rotateY(){
-    // debugger
     for(let i = 0; i< this.bones.length; i++){
       const bone = this.bones[i];
       if(i <= 1){
@@ -197,21 +191,16 @@ class Trunk {
     
     if(this.branches.length <= Math.floor(this.params.branchNum)){
       while(this.branches.length < Math.floor(this.params.branchNum)){
-        // debugger
         let branch = new Branch(this.branchSizing, this.branchFolder, this.requestRender, this.params.color, this.params.leafColor)
         this.connectBranch(branch);
       }
     } else if(this.branches.length > Math.floor(this.params.branchNum)){
       while(this.branches.length > Math.floor(this.params.branchNum)){
-        // debugger
         let branch = this.branches.pop();
         let branchPos = this.initialBranchPos.pop();
-        // debugger
         this.branchesFolders[branchPos[1]-1].removeFolder(branch.folder);
-        // debugger
         this.bones[branchPos[1]].remove(branch.bones[0])
         this.mesh.remove(branch.mesh);
-        // debugger
       }
     }
     this.requestRender();
@@ -229,14 +218,11 @@ class Trunk {
       x = anglesZ[Math.floor(Math.random() * anglesZ.length)];
       z = anglesX[Math.floor(Math.random() * anglesX.length)];
       if (!this.initialBranchPos.some((sub) => {
-        // debugger
         return (sub[1] == y && sub[2] == z && sub[0] == x);
       })){
-        // debugger
         different = true;
         this.initialBranchPos.push([x,y,z]);
       } else{
-        // debugger
       }
     }
     branch.bones[0].position.x = this.bones[y].position.x;
@@ -248,18 +234,15 @@ class Trunk {
     this.bones[y].add(branch.bones[0]);
     this.branches.push(branch);
     if(y === 0){
-      // debugger
     }
     let rowFolder = this.branchesFolders[y-1];
     if(!rowFolder){
-      // debugger
     }
     // let i = 
     branch.setupBranchRotation(x,0,z);
     let folder = rowFolder.addFolder('Branch ' + y + "," + x + "," + z);
     branch.setupBranchFolder(folder)
 
-    // debugger
 
     this.mesh.add(branch.mesh);
   }
@@ -269,21 +252,14 @@ class Trunk {
     for(let i = 0; i < 15; i++){
       let bone = this.bones[this.bones.length - 1];
       let path = 'src/models/leaf-long.glb';
-      // if(boneNum === this.bones.length - 1){
-      //   path = 'src/models/leaf.glb'
-      // }
       let file = await loader.loadAsync('src/models/leaf.glb')
       let leafMesh = file.scenes[0].children[2];
       leafMesh.scale.set(7,7,7);
       leafMesh.material = new THREE.MeshToonMaterial();
       leafMesh.material.color.set(this.params.leafColor)
-      // debugger
       let max = bone.position.y;
       let min = this.bones[1].position.y;
-      // debugger
       leafMesh.position.y = Math.random() * (1 - (-5)) + (-5);
-      // leafMesh.position.x = bone.position.x;
-      // leafMesh.position.z = bone.position.z;
       leafMesh.rotation.x = Math.random() * (6 - 1) + 1;
       leafMesh.rotation.y = Math.random() * (6 - 1) + 1;
       leafMesh.rotation.z = Math.random() * (6 - 1) + 1;
