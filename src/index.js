@@ -49,8 +49,7 @@ function main() {
     side: THREE.DoubleSide
   })
   let plane = new THREE.Mesh( planeGeo, material );
-  console.log(THREE.Math.radToDeg(1.5707963267948966) % 360)
-  console.log(THREE.Math.degToRad(90))
+
   plane.rotateX(THREE.Math.degToRad(90))
   scene.add(plane)
 
